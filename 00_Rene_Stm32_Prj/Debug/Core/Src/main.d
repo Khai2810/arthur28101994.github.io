@@ -21,7 +21,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Core/Inc/gpio.h ../Core/Inc/main.h \
- E:/00_ReneProj/01_Github/arthur28101994.github.io/00_Rene_Stm32_Prj/Drivers/MyLib/Modules/User_Uart/ip/usart/Usart_Reg.h
+ E:/00_ReneProj/01_Github/arthur28101994.github.io/00_Rene_Stm32_Prj/Drivers/MyLib/Modules/User_Uart/ip/usart/Usart_Reg.h \
+ E:/00_ReneProj/01_Github/arthur28101994.github.io/00_Rene_Stm32_Prj/Drivers/MyLib/Modules/User_Uart/MyUart.h
 
 ../Core/Inc/main.h:
 
@@ -72,3 +73,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/main.h:
 
 E:/00_ReneProj/01_Github/arthur28101994.github.io/00_Rene_Stm32_Prj/Drivers/MyLib/Modules/User_Uart/ip/usart/Usart_Reg.h:
+
+E:/00_ReneProj/01_Github/arthur28101994.github.io/00_Rene_Stm32_Prj/Drivers/MyLib/Modules/User_Uart/MyUart.h:

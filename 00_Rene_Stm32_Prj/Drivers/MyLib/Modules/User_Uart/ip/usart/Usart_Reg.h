@@ -91,7 +91,15 @@
 #define USART_CR3_CTSE	    		0x00000200
 #define USART_CR3_CTSIE	    		0x00000400
 
-
+#define UART_SIZE_RING_BUFFER 128U
+typedef struct Uart_RingBuffer
+{
+	uint8_t Uart_Ring_TxBuffer_Channel[UART_SIZE_RING_BUFFER];
+	uint8_t Uart_Ring_RxBuffer_Channel[UART_SIZE_RING_BUFFER];
+	uint8_t data;
+	uint8_t pStart;
+	uint8_t pEnd;
+}Uart_Ring_Buffer_t;
 
 
 

@@ -22,6 +22,7 @@
 #include "main.h"
 #include "gpio.h"
 #include "Usart_Reg.h"
+#include "MyUart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -89,15 +90,15 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-//  Uart_Transmit('k');
+  char Trans_Buff[] = "khongbiet";
   /* USER CODE END 2 */
-  Uart_Init();
+  Uart_Init(USART1);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-	  Uart_Transmit('k');
+	  Uart_Transmit(USART1, Trans_Buff, 20);
 
     /* USER CODE BEGIN 3 */
   }
