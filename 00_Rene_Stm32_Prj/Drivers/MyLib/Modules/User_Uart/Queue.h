@@ -3,15 +3,16 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include <stdint.h>
 
 typedef enum _bool {
-	false,
-	true,
+	False,
+	True,
 } bool_t;
 
 typedef enum _status {
-	failed,
-	success,
+	Failed,
+	Success,
 } status_t;
 
 typedef struct _queue_buffer {
@@ -24,8 +25,8 @@ typedef struct _queue_buffer {
 
 queue_buffer_t *queueCreate ( int size );
 void queueRelease ( queue_buffer_t *queue );
-int isQueueEmpty ( queue_buffer_t *queue );
-int isQueueFull ( queue_buffer_t *queue );
+bool_t isQueueEmpty ( queue_buffer_t *queue );
+bool_t isQueueFull ( queue_buffer_t *queue );
 int enQueue ( queue_buffer_t *queue, char data );
 int deQueue ( queue_buffer_t *queue, char *data );
 
