@@ -23,7 +23,8 @@ Drivers/MyLib/Modules/User_Uart/MyUart.o: \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
+ ../Drivers/MyLib/Modules/User_Uart/Queue.h
 
 ../Drivers/MyLib/Modules/User_Uart/MyUart.h:
 
@@ -74,3 +75,5 @@ E:/00_ReneProj/01_Github/arthur28101994.github.io/00_Rene_Stm32_Prj/Drivers/MyLi
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
+
+../Drivers/MyLib/Modules/User_Uart/Queue.h:
