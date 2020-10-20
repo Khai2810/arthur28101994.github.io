@@ -4,7 +4,7 @@
 #include "Queue.h"
 
 
-Uart_Ring_Buffer_t* BufferUart1;
+//~ Uart_Ring_Buffer_t* BufferUart1;
 
 queue_buffer_t *tx_queue_buffer;
 queue_buffer_t *rx_queue_buffer;
@@ -34,9 +34,8 @@ void Uart_Write_Buffer(Gst_UartRegType *Channel, const uint8_t* pu8Data, uint8_t
 	
 	for (count = 0; count < u8LengthSize; count++) {
 		enQueue(tx_queue_buffer, *(pu8Data++));
+		Channel->CR1 = USART_CR1_TXEIE;
 	}
-	
-	Channel->CR1 = USART_CR1_TXEIE ;
 }
 
 void Uart_SetBaudrate()
@@ -87,7 +86,7 @@ void USART1_IRQHandler(void)
 	//~ {
 		//~ BufferUart1->pStart = 0;
 	//~ }
-	
+	Channel->CR1 = ~USART_CR1_TXEIE;
 	char c;
 	deQueue(tx_queue_buffer, &c);
 	USART1->DR = c;
