@@ -4,6 +4,16 @@
 #include <stdio.h>
 #include <malloc.h>
 
+typedef enum _bool {
+	false,
+	true,
+} bool_t;
+
+typedef enum _status {
+	failed,
+	success,
+} status_t;
+
 typedef struct _queue_buffer {
     int front;
     int rear;

@@ -24,26 +24,26 @@ void queueRelease ( queue_buffer_t *queue )
     free ( queue );
 }
 
-int isQueueEmpty ( queue_buffer_t *queue )
+bool_t isQueueEmpty ( queue_buffer_t *queue )
 {
     if ( queue->count == queue->size )
-        return 1;
+        return true;
 
-    return 0;
+    return false;
 }
 
-int isQueueFull ( queue_buffer_t *queue )
+bool_t isQueueFull ( queue_buffer_t *queue )
 {
     if ( queue->count == 0 )
-        return 1;
+        return true;
 
-    return 0;
+    return false;
 }
 
 int enQueue ( queue_buffer_t *queue, char data )
 {
     if ( isQueueFull( queue ) )
-        return -1;
+        return failed;
     else {
         queue->buffer[queue->rear] = data;
         queue->rear++;
@@ -51,13 +51,13 @@ int enQueue ( queue_buffer_t *queue, char data )
         if ( queue->rear == queue->size )
             queue->rear = 0;
     }
-    return 0;
+    return success;
 }
 
 int deQueue ( queue_buffer_t *queue, char *data )
 {
     if ( isQueueEmpty( queue ) )
-        return -1;
+        return failed;
     else {
         *data = queue->buffer[queue->front];
         queue->front++;
@@ -65,5 +65,5 @@ int deQueue ( queue_buffer_t *queue, char *data )
         if ( queue->front == queue->size )
             queue->front = 0;
     }
-    return 0;
+    return success;
 }
