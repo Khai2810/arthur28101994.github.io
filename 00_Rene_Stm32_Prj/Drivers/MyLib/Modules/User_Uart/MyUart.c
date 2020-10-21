@@ -38,7 +38,7 @@ void Uart_Write_Buffer(Gst_UartRegType *Channel, const uint8_t* pu8Data, uint8_t
 	}
 }
 
-void Uart_SetBaudrate()
+void Uart_SetBaudrate(Gst_UartRegType *Channel, uint32_t baudrate)
 {
 	  /*Calculate Baudrate */
 	  /* USARTDIV = DIV_Mantissa + (DIV_Fraction / 16) */
@@ -48,35 +48,60 @@ void Uart_SetBaudrate()
 	  uint32_t FCK = 72000000;
 	  uint32_t DIV_Mantissa;
 	  uint32_t DIV_Fraction;
-	  uint32_t  Baudrate = 9600;
-	  DIV_Mantissa = FCK / (Baudrate * 16);
-	  DIV_Fraction = (FCK / Baudrate) % 16;
-	  USART1->BRR = (DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK;
-	  USART1->BRR |= DIV_Fraction & USART_BRR_DIV_Fraction_MASK;
+	  //~ uint32_t  Baudrate = 9600;
+	  //~ DIV_Mantissa = FCK / (Baudrate * 16);
+	  //~ DIV_Fraction = (FCK / Baudrate) % 16;
+	  //~ USART1->BRR = (DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK;
+	  //~ USART1->BRR |= DIV_Fraction & USART_BRR_DIV_Fraction_MASK;
+	
+	DIV_Mantissa = FCK / (baudrate * 16);
+	DIV_Fraction = (FCK / baudrate) % 16;
+	Channel->BRR = ((DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK) |
+					(DIV_Fraction & USART_BRR_DIV_Fraction_MASK);
 }
 
 void Uart_Init(Gst_UartRegType *Channel)
 {
 	__HAL_RCC_USART1_CLK_ENABLE();
 	__HAL_RCC_USART2_CLK_ENABLE();
-	  Uart_SetBaudrate();
-	  Channel->CR1 = USART_CR1_UE | USART_CR1_TE ;
-	  
-	  tx_queue_buffer = queueCreate(128);
-	  rx_queue_buffer = queueCreate(128);
+	
+	/* Setting baudrate */
+	Uart_SetBaudrate(Channel, 9600);
+
+	/* Enable TX/RX */
+	Channel->CR1 = USART_CR1_UE | USART_CR1_TE ;
+
+	/* Init Tx/Rx buffer */
+	tx_queue_buffer = queueCreate(128);
+	rx_queue_buffer = queueCreate(128);
 }
 
 void Uart_DeInit(Gst_UartRegType *Channel)
 {
 	(void)Channel;
-	
+
+	/* Free Tx/Rx buffer */
 	queueRelease(tx_queue_buffer);
 	queueRelease(rx_queue_buffer);
 }
 
-void Uart_Transmit(Gst_UartRegType *Channel, uint8_t* u8DataPtr, uint8_t u8LengthSize)
+void Uart_PutChar(Gst_UartRegType *Channel, uint8_t byte)
+{	/* Push data into Queue */
+	enQueue(tx_queue_buffer, byte);
+
+	/* Enable Transmit Interrupt */
+	Channel->CR1 |= USART_CR1_TXEIE;
+}
+
+void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t u8LengthSize)
 {
-	Uart_Write_Buffer(Channel, u8DataPtr, u8LengthSize);
+	//~ Uart_Write_Buffer(Channel, u8DataPtr, u8LengthSize);
+
+	int32_t len = u8LengthSize;
+
+	/* Transmit a string */
+	while (len --)
+		Uart_PutChar(Channel, *(u8DataPrt++));
 }
 
 void USART1_IRQHandler(void)
@@ -86,10 +111,16 @@ void USART1_IRQHandler(void)
 	//~ {
 		//~ BufferUart1->pStart = 0;
 	//~ }
-	Gst_UartRegType *Channel;
-	Channel->CR1 &= ~USART_CR1_TXEIE;
-	char c;
-	deQueue(tx_queue_buffer, &c);
-	USART1->DR = c;
+
+	uint8_t byte;
+	
+	/* Disable Tx interrupt */
+	USART1->CR1 &= ~USART_CR1_TXEIE;
+
+	/* TXE bit as 1 */
+	if ((USART1->TXE >> 7))
+		/* Write data to DR register if data is popped from Queue sucessfully */
+		if (deQueue(tx_queue_buffer, &byte))
+			USART1->DR = byte;
 }
 
