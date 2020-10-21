@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000029  00000000  00000000  00020070  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00005219  00000000  00000000  00020099  2**0
+ 12 .debug_info   000051fa  00000000  00000000  00020099  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 000013e9  00000000  00000000  000252b2  2**0
+ 13 .debug_abbrev 000013eb  00000000  00000000  00025293  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 00000498  00000000  00000000  000266a0  2**3
+ 14 .debug_aranges 000004a0  00000000  00000000  00026680  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 000003d0  00000000  00000000  00026b38  2**3
+ 15 .debug_ranges 000003d8  00000000  00000000  00026b20  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macro  00015632  00000000  00000000  00026f08  2**0
+ 16 .debug_macro  00015632  00000000  00000000  00026ef8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   0000556c  00000000  00000000  0003c53a  2**0
+ 17 .debug_line   00005587  00000000  00000000  0003c52a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    00076de1  00000000  00000000  00041aa6  2**0
+ 18 .debug_str    00076e0e  00000000  00000000  00041ab1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000b8887  2**0
+ 19 .comment      0000007b  00000000  00000000  000b88bf  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00001098  00000000  00000000  000b8904  2**2
+ 20 .debug_frame  000010bc  00000000  00000000  000b893c  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -200,7 +200,7 @@ int main(void)
   /* USER CODE END 2 */
   Uart_Init(USART1);
  80002c8:	4805      	ldr	r0, [pc, #20]	; (80002e0 <main+0x34>)
- 80002ca:	f000 f98b 	bl	80005e4 <Uart_Init>
+ 80002ca:	f000 f95d 	bl	8000588 <Uart_Init>
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -211,7 +211,7 @@ int main(void)
  80002d0:	2214      	movs	r2, #20
  80002d2:	4619      	mov	r1, r3
  80002d4:	4802      	ldr	r0, [pc, #8]	; (80002e0 <main+0x34>)
- 80002d6:	f000 f9bd 	bl	8000654 <Uart_Transmit>
+ 80002d6:	f000 f9ad 	bl	8000634 <Uart_Transmit>
  80002da:	e7f8      	b.n	80002ce <main+0x22>
  80002dc:	0800169c 	.word	0x0800169c
  80002e0:	40013800 	.word	0x40013800
@@ -750,239 +750,253 @@ void SystemInit (void)
  800053c:	e7fe      	b.n	800053c <ADC1_2_IRQHandler>
 	...
 
-08000540 <Uart_Write_Buffer>:
-
-queue_buffer_t *tx_queue_buffer;
-queue_buffer_t *rx_queue_buffer;
-
-void Uart_Write_Buffer(Gst_UartRegType *Channel, const uint8_t* pu8Data, uint8_t u8LengthSize)
-{
- 8000540:	b580      	push	{r7, lr}
- 8000542:	b086      	sub	sp, #24
- 8000544:	af00      	add	r7, sp, #0
- 8000546:	60f8      	str	r0, [r7, #12]
- 8000548:	60b9      	str	r1, [r7, #8]
- 800054a:	4613      	mov	r3, r2
- 800054c:	71fb      	strb	r3, [r7, #7]
-			//~ BufferUart1->pEnd = (BufferUart1->pEnd + 1) & (UART_SIZE_RING_BUFFER - 1);
-			//~ pu8Data++;
-		//~ }
-	//~ }
-	
-	for (count = 0; count < u8LengthSize; count++) {
- 800054e:	2300      	movs	r3, #0
- 8000550:	75fb      	strb	r3, [r7, #23]
- 8000552:	e011      	b.n	8000578 <Uart_Write_Buffer+0x38>
-		enQueue(tx_queue_buffer, *(pu8Data++));
- 8000554:	4b0c      	ldr	r3, [pc, #48]	; (8000588 <Uart_Write_Buffer+0x48>)
- 8000556:	6818      	ldr	r0, [r3, #0]
- 8000558:	68bb      	ldr	r3, [r7, #8]
- 800055a:	1c5a      	adds	r2, r3, #1
- 800055c:	60ba      	str	r2, [r7, #8]
- 800055e:	781b      	ldrb	r3, [r3, #0]
- 8000560:	4619      	mov	r1, r3
- 8000562:	f000 f8f4 	bl	800074e <enQueue>
+08000540 <Uart_SetBaudrate>:
 		Channel->CR1 |= USART_CR1_TXEIE;
- 8000566:	68fb      	ldr	r3, [r7, #12]
- 8000568:	68db      	ldr	r3, [r3, #12]
- 800056a:	f043 0280 	orr.w	r2, r3, #128	; 0x80
- 800056e:	68fb      	ldr	r3, [r7, #12]
- 8000570:	60da      	str	r2, [r3, #12]
-	for (count = 0; count < u8LengthSize; count++) {
- 8000572:	7dfb      	ldrb	r3, [r7, #23]
- 8000574:	3301      	adds	r3, #1
- 8000576:	75fb      	strb	r3, [r7, #23]
- 8000578:	7dfa      	ldrb	r2, [r7, #23]
- 800057a:	79fb      	ldrb	r3, [r7, #7]
- 800057c:	429a      	cmp	r2, r3
- 800057e:	d3e9      	bcc.n	8000554 <Uart_Write_Buffer+0x14>
 	}
 }
- 8000580:	bf00      	nop
- 8000582:	3718      	adds	r7, #24
- 8000584:	46bd      	mov	sp, r7
- 8000586:	bd80      	pop	{r7, pc}
- 8000588:	20000098 	.word	0x20000098
 
-0800058c <Uart_SetBaudrate>:
-
-void Uart_SetBaudrate()
+void Uart_SetBaudrate(Gst_UartRegType *Channel, uint32_t baudrate)
 {
- 800058c:	b480      	push	{r7}
- 800058e:	b085      	sub	sp, #20
- 8000590:	af00      	add	r7, sp, #0
+ 8000540:	b480      	push	{r7}
+ 8000542:	b087      	sub	sp, #28
+ 8000544:	af00      	add	r7, sp, #0
+ 8000546:	6078      	str	r0, [r7, #4]
+ 8000548:	6039      	str	r1, [r7, #0]
 	  /*Calculate Baudrate */
 	  /* USARTDIV = DIV_Mantissa + (DIV_Fraction / 16) */
 	  /* Tx/ Rx baud =
 	  legend: fCK - Input clock to the peripheral (PCLK1 for USART2, 3, 4, 5 or PCLK2 for USART1)
 	  fCK/(16*USARTDIV) */
 	  uint32_t FCK = 72000000;
- 8000592:	4b12      	ldr	r3, [pc, #72]	; (80005dc <Uart_SetBaudrate+0x50>)
- 8000594:	60fb      	str	r3, [r7, #12]
-	  uint32_t DIV_Mantissa;
-	  uint32_t DIV_Fraction;
-	  uint32_t  Baudrate = 9600;
- 8000596:	f44f 5316 	mov.w	r3, #9600	; 0x2580
- 800059a:	60bb      	str	r3, [r7, #8]
-	  DIV_Mantissa = FCK / (Baudrate * 16);
- 800059c:	68bb      	ldr	r3, [r7, #8]
- 800059e:	011b      	lsls	r3, r3, #4
- 80005a0:	68fa      	ldr	r2, [r7, #12]
- 80005a2:	fbb2 f3f3 	udiv	r3, r2, r3
- 80005a6:	607b      	str	r3, [r7, #4]
-	  DIV_Fraction = (FCK / Baudrate) % 16;
- 80005a8:	68fa      	ldr	r2, [r7, #12]
- 80005aa:	68bb      	ldr	r3, [r7, #8]
- 80005ac:	fbb2 f3f3 	udiv	r3, r2, r3
- 80005b0:	f003 030f 	and.w	r3, r3, #15
- 80005b4:	603b      	str	r3, [r7, #0]
-	  USART1->BRR = (DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK;
- 80005b6:	687b      	ldr	r3, [r7, #4]
- 80005b8:	011b      	lsls	r3, r3, #4
- 80005ba:	4a09      	ldr	r2, [pc, #36]	; (80005e0 <Uart_SetBaudrate+0x54>)
- 80005bc:	b29b      	uxth	r3, r3
- 80005be:	6093      	str	r3, [r2, #8]
-	  USART1->BRR |= DIV_Fraction & USART_BRR_DIV_Fraction_MASK;
- 80005c0:	4b07      	ldr	r3, [pc, #28]	; (80005e0 <Uart_SetBaudrate+0x54>)
- 80005c2:	689a      	ldr	r2, [r3, #8]
- 80005c4:	683b      	ldr	r3, [r7, #0]
- 80005c6:	f003 030f 	and.w	r3, r3, #15
- 80005ca:	4905      	ldr	r1, [pc, #20]	; (80005e0 <Uart_SetBaudrate+0x54>)
- 80005cc:	4313      	orrs	r3, r2
- 80005ce:	608b      	str	r3, [r1, #8]
+ 800054a:	4b0e      	ldr	r3, [pc, #56]	; (8000584 <Uart_SetBaudrate+0x44>)
+ 800054c:	617b      	str	r3, [r7, #20]
+	  //~ DIV_Mantissa = FCK / (Baudrate * 16);
+	  //~ DIV_Fraction = (FCK / Baudrate) % 16;
+	  //~ USART1->BRR = (DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK;
+	  //~ USART1->BRR |= DIV_Fraction & USART_BRR_DIV_Fraction_MASK;
+	
+	DIV_Mantissa = FCK / (baudrate * 16);
+ 800054e:	683b      	ldr	r3, [r7, #0]
+ 8000550:	011b      	lsls	r3, r3, #4
+ 8000552:	697a      	ldr	r2, [r7, #20]
+ 8000554:	fbb2 f3f3 	udiv	r3, r2, r3
+ 8000558:	613b      	str	r3, [r7, #16]
+	DIV_Fraction = (FCK / baudrate) % 16;
+ 800055a:	697a      	ldr	r2, [r7, #20]
+ 800055c:	683b      	ldr	r3, [r7, #0]
+ 800055e:	fbb2 f3f3 	udiv	r3, r2, r3
+ 8000562:	f003 030f 	and.w	r3, r3, #15
+ 8000566:	60fb      	str	r3, [r7, #12]
+	Channel->BRR = ((DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK) |
+ 8000568:	693b      	ldr	r3, [r7, #16]
+ 800056a:	011b      	lsls	r3, r3, #4
+ 800056c:	b29a      	uxth	r2, r3
+					(DIV_Fraction & USART_BRR_DIV_Fraction_MASK);
+ 800056e:	68fb      	ldr	r3, [r7, #12]
+ 8000570:	f003 030f 	and.w	r3, r3, #15
+	Channel->BRR = ((DIV_Mantissa << 4) & USART_BRR_DIV_Mantissa_MASK) |
+ 8000574:	431a      	orrs	r2, r3
+ 8000576:	687b      	ldr	r3, [r7, #4]
+ 8000578:	609a      	str	r2, [r3, #8]
 }
- 80005d0:	bf00      	nop
- 80005d2:	3714      	adds	r7, #20
- 80005d4:	46bd      	mov	sp, r7
- 80005d6:	bc80      	pop	{r7}
- 80005d8:	4770      	bx	lr
- 80005da:	bf00      	nop
- 80005dc:	044aa200 	.word	0x044aa200
- 80005e0:	40013800 	.word	0x40013800
+ 800057a:	bf00      	nop
+ 800057c:	371c      	adds	r7, #28
+ 800057e:	46bd      	mov	sp, r7
+ 8000580:	bc80      	pop	{r7}
+ 8000582:	4770      	bx	lr
+ 8000584:	044aa200 	.word	0x044aa200
 
-080005e4 <Uart_Init>:
+08000588 <Uart_Init>:
 
 void Uart_Init(Gst_UartRegType *Channel)
 {
- 80005e4:	b580      	push	{r7, lr}
- 80005e6:	b084      	sub	sp, #16
- 80005e8:	af00      	add	r7, sp, #0
- 80005ea:	6078      	str	r0, [r7, #4]
+ 8000588:	b580      	push	{r7, lr}
+ 800058a:	b084      	sub	sp, #16
+ 800058c:	af00      	add	r7, sp, #0
+ 800058e:	6078      	str	r0, [r7, #4]
 	__HAL_RCC_USART1_CLK_ENABLE();
- 80005ec:	4b16      	ldr	r3, [pc, #88]	; (8000648 <Uart_Init+0x64>)
- 80005ee:	699b      	ldr	r3, [r3, #24]
- 80005f0:	4a15      	ldr	r2, [pc, #84]	; (8000648 <Uart_Init+0x64>)
- 80005f2:	f443 4380 	orr.w	r3, r3, #16384	; 0x4000
- 80005f6:	6193      	str	r3, [r2, #24]
- 80005f8:	4b13      	ldr	r3, [pc, #76]	; (8000648 <Uart_Init+0x64>)
- 80005fa:	699b      	ldr	r3, [r3, #24]
- 80005fc:	f403 4380 	and.w	r3, r3, #16384	; 0x4000
- 8000600:	60fb      	str	r3, [r7, #12]
- 8000602:	68fb      	ldr	r3, [r7, #12]
+ 8000590:	4b18      	ldr	r3, [pc, #96]	; (80005f4 <Uart_Init+0x6c>)
+ 8000592:	699b      	ldr	r3, [r3, #24]
+ 8000594:	4a17      	ldr	r2, [pc, #92]	; (80005f4 <Uart_Init+0x6c>)
+ 8000596:	f443 4380 	orr.w	r3, r3, #16384	; 0x4000
+ 800059a:	6193      	str	r3, [r2, #24]
+ 800059c:	4b15      	ldr	r3, [pc, #84]	; (80005f4 <Uart_Init+0x6c>)
+ 800059e:	699b      	ldr	r3, [r3, #24]
+ 80005a0:	f403 4380 	and.w	r3, r3, #16384	; 0x4000
+ 80005a4:	60fb      	str	r3, [r7, #12]
+ 80005a6:	68fb      	ldr	r3, [r7, #12]
 	__HAL_RCC_USART2_CLK_ENABLE();
- 8000604:	4b10      	ldr	r3, [pc, #64]	; (8000648 <Uart_Init+0x64>)
- 8000606:	69db      	ldr	r3, [r3, #28]
- 8000608:	4a0f      	ldr	r2, [pc, #60]	; (8000648 <Uart_Init+0x64>)
- 800060a:	f443 3300 	orr.w	r3, r3, #131072	; 0x20000
- 800060e:	61d3      	str	r3, [r2, #28]
- 8000610:	4b0d      	ldr	r3, [pc, #52]	; (8000648 <Uart_Init+0x64>)
- 8000612:	69db      	ldr	r3, [r3, #28]
- 8000614:	f403 3300 	and.w	r3, r3, #131072	; 0x20000
- 8000618:	60bb      	str	r3, [r7, #8]
- 800061a:	68bb      	ldr	r3, [r7, #8]
-	  Uart_SetBaudrate();
- 800061c:	f7ff ffb6 	bl	800058c <Uart_SetBaudrate>
-	  Channel->CR1 = USART_CR1_UE | USART_CR1_TE ;
- 8000620:	687b      	ldr	r3, [r7, #4]
- 8000622:	f242 0208 	movw	r2, #8200	; 0x2008
- 8000626:	60da      	str	r2, [r3, #12]
-	  
-	  tx_queue_buffer = queueCreate(128);
- 8000628:	2080      	movs	r0, #128	; 0x80
- 800062a:	f000 f841 	bl	80006b0 <queueCreate>
- 800062e:	4602      	mov	r2, r0
- 8000630:	4b06      	ldr	r3, [pc, #24]	; (800064c <Uart_Init+0x68>)
- 8000632:	601a      	str	r2, [r3, #0]
-	  rx_queue_buffer = queueCreate(128);
- 8000634:	2080      	movs	r0, #128	; 0x80
- 8000636:	f000 f83b 	bl	80006b0 <queueCreate>
- 800063a:	4602      	mov	r2, r0
- 800063c:	4b04      	ldr	r3, [pc, #16]	; (8000650 <Uart_Init+0x6c>)
- 800063e:	601a      	str	r2, [r3, #0]
-}
- 8000640:	bf00      	nop
- 8000642:	3710      	adds	r7, #16
- 8000644:	46bd      	mov	sp, r7
- 8000646:	bd80      	pop	{r7, pc}
- 8000648:	40021000 	.word	0x40021000
- 800064c:	20000098 	.word	0x20000098
- 8000650:	2000009c 	.word	0x2000009c
+ 80005a8:	4b12      	ldr	r3, [pc, #72]	; (80005f4 <Uart_Init+0x6c>)
+ 80005aa:	69db      	ldr	r3, [r3, #28]
+ 80005ac:	4a11      	ldr	r2, [pc, #68]	; (80005f4 <Uart_Init+0x6c>)
+ 80005ae:	f443 3300 	orr.w	r3, r3, #131072	; 0x20000
+ 80005b2:	61d3      	str	r3, [r2, #28]
+ 80005b4:	4b0f      	ldr	r3, [pc, #60]	; (80005f4 <Uart_Init+0x6c>)
+ 80005b6:	69db      	ldr	r3, [r3, #28]
+ 80005b8:	f403 3300 	and.w	r3, r3, #131072	; 0x20000
+ 80005bc:	60bb      	str	r3, [r7, #8]
+ 80005be:	68bb      	ldr	r3, [r7, #8]
+	
+	/* Setting baudrate */
+	Uart_SetBaudrate(Channel, 9600);
+ 80005c0:	f44f 5116 	mov.w	r1, #9600	; 0x2580
+ 80005c4:	6878      	ldr	r0, [r7, #4]
+ 80005c6:	f7ff ffbb 	bl	8000540 <Uart_SetBaudrate>
 
-08000654 <Uart_Transmit>:
+	/* Enable TX/RX */
+	Channel->CR1 = USART_CR1_UE | USART_CR1_TE ;
+ 80005ca:	687b      	ldr	r3, [r7, #4]
+ 80005cc:	f242 0208 	movw	r2, #8200	; 0x2008
+ 80005d0:	60da      	str	r2, [r3, #12]
+
+	/* Init Tx/Rx buffer */
+	tx_queue_buffer = queueCreate(128);
+ 80005d2:	2080      	movs	r0, #128	; 0x80
+ 80005d4:	f000 f86c 	bl	80006b0 <queueCreate>
+ 80005d8:	4602      	mov	r2, r0
+ 80005da:	4b07      	ldr	r3, [pc, #28]	; (80005f8 <Uart_Init+0x70>)
+ 80005dc:	601a      	str	r2, [r3, #0]
+	rx_queue_buffer = queueCreate(128);
+ 80005de:	2080      	movs	r0, #128	; 0x80
+ 80005e0:	f000 f866 	bl	80006b0 <queueCreate>
+ 80005e4:	4602      	mov	r2, r0
+ 80005e6:	4b05      	ldr	r3, [pc, #20]	; (80005fc <Uart_Init+0x74>)
+ 80005e8:	601a      	str	r2, [r3, #0]
+}
+ 80005ea:	bf00      	nop
+ 80005ec:	3710      	adds	r7, #16
+ 80005ee:	46bd      	mov	sp, r7
+ 80005f0:	bd80      	pop	{r7, pc}
+ 80005f2:	bf00      	nop
+ 80005f4:	40021000 	.word	0x40021000
+ 80005f8:	20000098 	.word	0x20000098
+ 80005fc:	2000009c 	.word	0x2000009c
+
+08000600 <Uart_PutChar>:
 	queueRelease(tx_queue_buffer);
 	queueRelease(rx_queue_buffer);
 }
 
-void Uart_Transmit(Gst_UartRegType *Channel, uint8_t* u8DataPtr, uint8_t u8LengthSize)
-{
- 8000654:	b580      	push	{r7, lr}
- 8000656:	b084      	sub	sp, #16
- 8000658:	af00      	add	r7, sp, #0
- 800065a:	60f8      	str	r0, [r7, #12]
- 800065c:	60b9      	str	r1, [r7, #8]
- 800065e:	4613      	mov	r3, r2
- 8000660:	71fb      	strb	r3, [r7, #7]
-	Uart_Write_Buffer(Channel, u8DataPtr, u8LengthSize);
- 8000662:	79fb      	ldrb	r3, [r7, #7]
- 8000664:	461a      	mov	r2, r3
- 8000666:	68b9      	ldr	r1, [r7, #8]
- 8000668:	68f8      	ldr	r0, [r7, #12]
- 800066a:	f7ff ff69 	bl	8000540 <Uart_Write_Buffer>
+void Uart_PutChar(Gst_UartRegType *Channel, uint8_t byte)
+{	/* Push data into Queue */
+ 8000600:	b580      	push	{r7, lr}
+ 8000602:	b082      	sub	sp, #8
+ 8000604:	af00      	add	r7, sp, #0
+ 8000606:	6078      	str	r0, [r7, #4]
+ 8000608:	460b      	mov	r3, r1
+ 800060a:	70fb      	strb	r3, [r7, #3]
+	enQueue(tx_queue_buffer, byte);
+ 800060c:	4b08      	ldr	r3, [pc, #32]	; (8000630 <Uart_PutChar+0x30>)
+ 800060e:	681b      	ldr	r3, [r3, #0]
+ 8000610:	78fa      	ldrb	r2, [r7, #3]
+ 8000612:	4611      	mov	r1, r2
+ 8000614:	4618      	mov	r0, r3
+ 8000616:	f000 f89a 	bl	800074e <enQueue>
+
+	/* Enable Transmit Interrupt */
+	Channel->CR1 |= USART_CR1_TXEIE;
+ 800061a:	687b      	ldr	r3, [r7, #4]
+ 800061c:	68db      	ldr	r3, [r3, #12]
+ 800061e:	f043 0280 	orr.w	r2, r3, #128	; 0x80
+ 8000622:	687b      	ldr	r3, [r7, #4]
+ 8000624:	60da      	str	r2, [r3, #12]
 }
- 800066e:	bf00      	nop
- 8000670:	3710      	adds	r7, #16
- 8000672:	46bd      	mov	sp, r7
- 8000674:	bd80      	pop	{r7, pc}
+ 8000626:	bf00      	nop
+ 8000628:	3708      	adds	r7, #8
+ 800062a:	46bd      	mov	sp, r7
+ 800062c:	bd80      	pop	{r7, pc}
+ 800062e:	bf00      	nop
+ 8000630:	20000098 	.word	0x20000098
+
+08000634 <Uart_Transmit>:
+
+void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t u8LengthSize)
+{
+ 8000634:	b580      	push	{r7, lr}
+ 8000636:	b086      	sub	sp, #24
+ 8000638:	af00      	add	r7, sp, #0
+ 800063a:	60f8      	str	r0, [r7, #12]
+ 800063c:	60b9      	str	r1, [r7, #8]
+ 800063e:	4613      	mov	r3, r2
+ 8000640:	71fb      	strb	r3, [r7, #7]
+	//~ Uart_Write_Buffer(Channel, u8DataPtr, u8LengthSize);
+
+	int32_t len = u8LengthSize;
+ 8000642:	79fb      	ldrb	r3, [r7, #7]
+ 8000644:	617b      	str	r3, [r7, #20]
+
+	/* Transmit a string */
+	while (len --)
+ 8000646:	e007      	b.n	8000658 <Uart_Transmit+0x24>
+		Uart_PutChar(Channel, *(u8DataPtr++));
+ 8000648:	68bb      	ldr	r3, [r7, #8]
+ 800064a:	1c5a      	adds	r2, r3, #1
+ 800064c:	60ba      	str	r2, [r7, #8]
+ 800064e:	781b      	ldrb	r3, [r3, #0]
+ 8000650:	4619      	mov	r1, r3
+ 8000652:	68f8      	ldr	r0, [r7, #12]
+ 8000654:	f7ff ffd4 	bl	8000600 <Uart_PutChar>
+	while (len --)
+ 8000658:	697b      	ldr	r3, [r7, #20]
+ 800065a:	1e5a      	subs	r2, r3, #1
+ 800065c:	617a      	str	r2, [r7, #20]
+ 800065e:	2b00      	cmp	r3, #0
+ 8000660:	d1f2      	bne.n	8000648 <Uart_Transmit+0x14>
+}
+ 8000662:	bf00      	nop
+ 8000664:	3718      	adds	r7, #24
+ 8000666:	46bd      	mov	sp, r7
+ 8000668:	bd80      	pop	{r7, pc}
 	...
 
-08000678 <USART1_IRQHandler>:
+0800066c <USART1_IRQHandler>:
 
 void USART1_IRQHandler(void)
 {
- 8000678:	b580      	push	{r7, lr}
- 800067a:	b082      	sub	sp, #8
- 800067c:	af00      	add	r7, sp, #0
-	//~ if (++BufferUart1->pStart >= UART_SIZE_RING_BUFFER)
-	//~ {
-		//~ BufferUart1->pStart = 0;
+ 800066c:	b580      	push	{r7, lr}
+ 800066e:	b082      	sub	sp, #8
+ 8000670:	af00      	add	r7, sp, #0
 	//~ }
-	Gst_UartRegType *Channel;
-	Channel->CR1 &= ~USART_CR1_TXEIE;
+
+	uint8_t byte;
+	Gst_UartRegType *UART1;
+	/* Disable Tx interrupt */
+	UART1->CR1 &= ~USART_CR1_TXEIE;
+ 8000672:	687b      	ldr	r3, [r7, #4]
+ 8000674:	68db      	ldr	r3, [r3, #12]
+ 8000676:	f023 0280 	bic.w	r2, r3, #128	; 0x80
+ 800067a:	687b      	ldr	r3, [r7, #4]
+ 800067c:	60da      	str	r2, [r3, #12]
+
+	/* TXE bit as 1 */
+	if ((UART1->SR >> 7))
  800067e:	687b      	ldr	r3, [r7, #4]
- 8000680:	68db      	ldr	r3, [r3, #12]
- 8000682:	f023 0280 	bic.w	r2, r3, #128	; 0x80
- 8000686:	687b      	ldr	r3, [r7, #4]
- 8000688:	60da      	str	r2, [r3, #12]
-	char c;
-	deQueue(tx_queue_buffer, &c);
- 800068a:	4b07      	ldr	r3, [pc, #28]	; (80006a8 <USART1_IRQHandler+0x30>)
- 800068c:	681b      	ldr	r3, [r3, #0]
- 800068e:	1cfa      	adds	r2, r7, #3
- 8000690:	4611      	mov	r1, r2
- 8000692:	4618      	mov	r0, r3
- 8000694:	f000 f888 	bl	80007a8 <deQueue>
-	USART1->DR = c;
- 8000698:	78fa      	ldrb	r2, [r7, #3]
- 800069a:	4b04      	ldr	r3, [pc, #16]	; (80006ac <USART1_IRQHandler+0x34>)
- 800069c:	605a      	str	r2, [r3, #4]
+ 8000680:	681b      	ldr	r3, [r3, #0]
+ 8000682:	09db      	lsrs	r3, r3, #7
+ 8000684:	2b00      	cmp	r3, #0
+ 8000686:	d00d      	beq.n	80006a4 <USART1_IRQHandler+0x38>
+		/* Write data to DR register if data is popped from Queue successfully */
+		if (deQueue(tx_queue_buffer, &byte))
+ 8000688:	4b08      	ldr	r3, [pc, #32]	; (80006ac <USART1_IRQHandler+0x40>)
+ 800068a:	681b      	ldr	r3, [r3, #0]
+ 800068c:	1cfa      	adds	r2, r7, #3
+ 800068e:	4611      	mov	r1, r2
+ 8000690:	4618      	mov	r0, r3
+ 8000692:	f000 f889 	bl	80007a8 <deQueue>
+ 8000696:	4603      	mov	r3, r0
+ 8000698:	2b00      	cmp	r3, #0
+ 800069a:	d003      	beq.n	80006a4 <USART1_IRQHandler+0x38>
+			UART1->DR = byte;
+ 800069c:	78fb      	ldrb	r3, [r7, #3]
+ 800069e:	461a      	mov	r2, r3
+ 80006a0:	687b      	ldr	r3, [r7, #4]
+ 80006a2:	605a      	str	r2, [r3, #4]
 }
- 800069e:	bf00      	nop
- 80006a0:	3708      	adds	r7, #8
- 80006a2:	46bd      	mov	sp, r7
- 80006a4:	bd80      	pop	{r7, pc}
- 80006a6:	bf00      	nop
- 80006a8:	20000098 	.word	0x20000098
- 80006ac:	40013800 	.word	0x40013800
+ 80006a4:	bf00      	nop
+ 80006a6:	3708      	adds	r7, #8
+ 80006a8:	46bd      	mov	sp, r7
+ 80006aa:	bd80      	pop	{r7, pc}
+ 80006ac:	20000098 	.word	0x20000098
 
 080006b0 <queueCreate>:
 #include "Queue.h"

@@ -4,26 +4,26 @@
 
  typedef struct
   {
-    uint32_t SR;
-    uint32_t DR;
-    uint32_t BRR;
-    uint32_t CR1;
-    uint32_t CR2;
-    uint32_t CR3;
-	uint32_t GTPR;
+	volatile uint32_t SR;
+	volatile uint32_t DR;
+	volatile uint32_t BRR;
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t CR3;
+	volatile uint32_t GTPR;
   } Gst_UartRegType;
 /* Define number of USART channel that want to use */
 #define USART_INSTANCE				0x02
 
 /* define base address of USART */
 #define USART_BASEADDR_USART1		(0x40013800U)
-#define USART1 						((Gst_UartRegType*) USART_BASEADDR_USART1)
+#define USART1 						((volatile Gst_UartRegType*) USART_BASEADDR_USART1)
 
 #define USART_BASEADDR_USART2		(0x40004400U)
-#define USART2 						((Gst_UartRegType*) USART_BASEADDR_USART2)
+#define USART2 						((volatile Gst_UartRegType*) USART_BASEADDR_USART2)
 
 #define USART_BASEADDR_USART3		(0x40004800U)
-#define USART3 						((Gst_UartRegType*) USART_BASEADDR_USART3)
+#define USART3 						((volatile Gst_UartRegType*) USART_BASEADDR_USART3)
 
 /* Define array contain base address of usart channel want to use */
 //#define USART_BASE_PTRS				{USART1,USART2}
@@ -50,7 +50,7 @@
 
 
 /* define bits of CR1 register */
-#define USART_BRR_DIV_Mantissa_MASK 0x0000FFF0U;
+#define USART_BRR_DIV_Mantissa_MASK 0x0000FFF0U
 #define USART_BRR_DIV_Fraction_MASK 0x0000000FU
 #define USART_CR1_SBK				0x00000001
 #define USART_CR1_RWU				0x00000002

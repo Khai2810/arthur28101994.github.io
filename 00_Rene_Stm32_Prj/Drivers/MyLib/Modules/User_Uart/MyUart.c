@@ -101,7 +101,7 @@ void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t u8Lengt
 
 	/* Transmit a string */
 	while (len --)
-		Uart_PutChar(Channel, *(u8DataPrt++));
+		Uart_PutChar(Channel, *(u8DataPtr++));
 }
 
 void USART1_IRQHandler(void)
@@ -113,14 +113,14 @@ void USART1_IRQHandler(void)
 	//~ }
 
 	uint8_t byte;
-	
+	Gst_UartRegType *UART1;
 	/* Disable Tx interrupt */
-	USART1->CR1 &= ~USART_CR1_TXEIE;
+	UART1->CR1 &= ~USART_CR1_TXEIE;
 
 	/* TXE bit as 1 */
-	if ((USART1->TXE >> 7))
+	if ((UART1->SR >> 7))
 		/* Write data to DR register if data is popped from Queue successfully */
 		if (deQueue(tx_queue_buffer, &byte))
-			USART1->DR = byte;
+			UART1->DR = byte;
 }
 
