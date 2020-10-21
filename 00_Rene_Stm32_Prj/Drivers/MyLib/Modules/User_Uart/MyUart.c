@@ -119,7 +119,7 @@ void USART1_IRQHandler(void)
 
 	/* TXE bit as 1 */
 	if ((USART1->TXE >> 7))
-		/* Write data to DR register if data is popped from Queue sucessfully */
+		/* Write data to DR register if data is popped from Queue successfully */
 		if (deQueue(tx_queue_buffer, &byte))
 			USART1->DR = byte;
 }
