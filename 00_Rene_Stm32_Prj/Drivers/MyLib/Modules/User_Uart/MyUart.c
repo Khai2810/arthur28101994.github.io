@@ -74,6 +74,9 @@ void Uart_Init(Gst_UartRegType *Channel)
 	/* Init Tx/Rx buffer */
 	tx_queue_buffer = queueCreate(128);
 	rx_queue_buffer = queueCreate(128);
+	/* Enable Interrupt*/
+	HAL_NVIC_SetPriority(USART1_IRQn, 5, 0u);
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
 }
 
 void Uart_DeInit(Gst_UartRegType *Channel)
