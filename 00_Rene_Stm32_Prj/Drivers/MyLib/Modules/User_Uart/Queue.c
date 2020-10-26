@@ -10,10 +10,9 @@ queue_buffer_t *queueCreate ( int size )
     if ( !queue->buffer )
         return NULL;
 
-    queue->front = 0;
-    queue->rear = 0;
+    queue->front = -1;
+    queue->rear = -1;
     queue->size = size;
-    queue->count = size;
 
     return queue;
 }
@@ -26,7 +25,7 @@ void queueRelease ( queue_buffer_t *queue )
 
 bool_t isQueueEmpty ( queue_buffer_t *queue )
 {
-    if ( queue->count == queue->size )
+    if ( queue->front == -1 )
         return True;
 
     return False;
@@ -34,7 +33,8 @@ bool_t isQueueEmpty ( queue_buffer_t *queue )
 
 bool_t isQueueFull ( queue_buffer_t *queue )
 {
-    if ( queue->count == 0 )
+    if ( (queue->front == rear + 1) ||
+         (queue->front == 0 && queue->rear == queue->size - 1) )
         return True;
 
     return False;
@@ -45,25 +45,29 @@ int enQueue ( queue_buffer_t *queue, char data )
     if ( isQueueFull( queue ) )
         return Failed;
     else {
-        queue->buffer[queue->rear] = data;
-        queue->rear++;
-        queue->count--;
-        if ( queue->rear == queue->size )
-            queue->rear = 0;
+        if (queue->front == -1)
+			queue->fron = 0;
+		rear = (rear + 1) % queue->size;
+		queue->buffer[rear] = data;
     }
     return Success;
 }
 
 int deQueue ( queue_buffer_t *queue, char *data )
 {
+	char byte;
+	
     if ( isQueueEmpty( queue ) )
         return Failed;
     else {
-        *data = queue->buffer[queue->front];
-        queue->front++;
-        queue->count++;
-        if ( queue->front == queue->size )
-            queue->front = 0;
+        byte = queue->buffer[queue->front];
+        if ( queue->front == queue->rear ) {
+            queue->front = -1;
+            queue->rear = -1;
+		} else /* Queue has only one element. Reset the queue after dequeuing */
+			queue->front = (queue->front + 1) % queue->size;
+
+		*data = byte;
     }
     return Success;
 }
