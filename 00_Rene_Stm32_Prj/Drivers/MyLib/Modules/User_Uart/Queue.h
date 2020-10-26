@@ -19,7 +19,6 @@ typedef struct _queue_buffer {
     int front;
     int rear;
     int size;
-    int count;
     char *buffer;
 } queue_buffer_t;
 

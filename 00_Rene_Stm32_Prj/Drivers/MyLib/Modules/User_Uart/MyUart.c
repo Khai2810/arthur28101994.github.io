@@ -68,7 +68,7 @@ void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32Len
 
 	while (len)
 	{
-		while (len && enQueue(tx_queue_buffer, *(u8DataPtr++)))
+		while (len && !enQueue(tx_queue_buffer, **u8DataPtr++)))
 			len--;
 		/* Enable Tx interrupt */
 		Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
