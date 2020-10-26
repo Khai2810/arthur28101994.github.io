@@ -59,29 +59,35 @@ void Uart_DeInit(Gst_UartRegType *Channel)
 	HAL_NVIC_DisableIRQ(USART1_IRQn);
 }
 
-
 void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32LengthSize)
 {
 	uint32_t len = u32LengthSize;
 
-	while ((len--) && (!enQueue(tx_queue_buffer, *(pu8Data++))))
-		/* Nothing to do here */;
+	/* Disable Tx interrupt */
+	Channel->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 
-	Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
-}
+	while (len)
+	{
+		while (len && !enQueue(tx_queue_buffer, *(pu8Data++)))
+			len--;
+		/* Enable Tx interrupt */
+		Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
+	}
+}	
+	
 
 
 void USART1_IRQHandler(void)
 {
 	uint8_t byte;
 
-	/* Disable Tx interrupt */
-	USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
-
-	/* TXE bit as 1 */
+	/* Transmiting */
 	if ((USART1->SR >> 7))
 		/* Write data to DR register if data is popped from Queue successfully */
 		if (deQueue(tx_queue_buffer, &byte))
 			USART1->DR = byte;
+		else
+			/* Disable Tx interrupt */
+			USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);		
 }
 
