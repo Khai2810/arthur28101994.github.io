@@ -48,7 +48,7 @@ void Uart_Init(Gst_UartRegType *Channel, uint32_t baudrate)
 
 void Uart_DeInit(Gst_UartRegType *Channel)
 {
-	/* Do nothing with Channel */
+	/* Nothing to do with Channel */
 	(void)Channel;
 
 	/* Free Tx/Rx buffer */
@@ -65,7 +65,7 @@ void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32Len
 	uint32_t LengthAvailable = u32LengthSize;
 
 	while ((LengthAvailable--) && (!enQueue(tx_queue_buffer, *(pu8Data++))))
-		/* Do nothing here */;
+		/* Nothing to do here */;
 
 	Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
 }
