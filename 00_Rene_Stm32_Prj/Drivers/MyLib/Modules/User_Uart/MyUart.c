@@ -62,9 +62,9 @@ void Uart_DeInit(Gst_UartRegType *Channel)
 
 void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32LengthSize)
 {
-	uint32_t LengthAvailable = u32LengthSize;
+	uint32_t len = u32LengthSize;
 
-	while ((LengthAvailable--) && (!enQueue(tx_queue_buffer, *(pu8Data++))))
+	while ((len--) && (!enQueue(tx_queue_buffer, *(pu8Data++))))
 		/* Nothing to do here */;
 
 	Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
@@ -82,6 +82,6 @@ void USART1_IRQHandler(void)
 	if ((USART1->SR >> 7))
 		/* Write data to DR register if data is popped from Queue successfully */
 		if (deQueue(tx_queue_buffer, &byte))
-			USRT1->DR = byte;
+			USART1->DR = byte;
 }
 

@@ -90,8 +90,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  char Trans_Buff[] = "\nNeu ban that su tai gioi, duc do thi moi nguoi xung quanh "
+
+  const char *str = "\nNeu ban that su tai gioi, duc do thi moi nguoi xung quanh "
 					  "se tu nhin nhan va danh gia khong can go trong khua chieng.\n";
+  uint32_t str_size = strlen(str);
+
   /* USER CODE END 2 */
   Uart_Init(USART1, 9600);
   /* Infinite loop */
@@ -99,7 +102,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  Uart_Transmit(USART1, Trans_Buff, 20);
+	  Uart_Transmit(USART1, str, str_size);
 
     /* USER CODE BEGIN 3 */
   }
