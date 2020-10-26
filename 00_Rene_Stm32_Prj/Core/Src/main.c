@@ -90,15 +90,15 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  char Trans_Buff[] = "khongbiet";
+  char Trans_Buff[] = "khongbiet\r\n";
   /* USER CODE END 2 */
-  Uart_Init(USART1);
+  Uart_Init(USART1, 115200);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-	  Uart_Transmit(USART1, Trans_Buff, 20);
+	  Uart_Transmit(USART1, Trans_Buff, strlen(Trans_Buff));
 
     /* USER CODE BEGIN 3 */
   }
