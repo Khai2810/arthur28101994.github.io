@@ -33,7 +33,7 @@ void Uart_Init(Gst_UartRegType *Channel, uint32_t baudrate)
 	/* Setting baudrate */
 	Uart_SetBaudrate(Channel, baudrate);
 
-	/* Enable TX/RX */
+	/* Enable TX */
 	Channel->CR1 = USART_CR1_UE | USART_CR1_TE ;
 
 	/* Init Tx/Rx buffer */
@@ -48,11 +48,15 @@ void Uart_Init(Gst_UartRegType *Channel, uint32_t baudrate)
 
 void Uart_DeInit(Gst_UartRegType *Channel)
 {
+	/* Do nothing with Channel */
 	(void)Channel;
 
 	/* Free Tx/Rx buffer */
 	queueRelease(tx_queue_buffer);
 	queueRelease(rx_queue_buffer);
+
+	/* Disable Interrupt*/
+	HAL_NVIC_DisableIRQ(USART1_IRQn);
 }
 
 
@@ -60,24 +64,24 @@ void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32Len
 {
 	uint32_t LengthAvailable = u32LengthSize;
 
-	while ((LengthAvailable--) && (!enQueue(tx_queue_buffer, *(pu8Data++))));
+	while ((LengthAvailable--) && (!enQueue(tx_queue_buffer, *(pu8Data++))))
+		/* Do nothing here */;
 
-	Channel->CR1 |= USART_CR1_TXEIE;
+	Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
 }
 
 
 void USART1_IRQHandler(void)
 {
-	Gst_UartRegType *UART1;
 	uint8_t byte;
 
 	/* Disable Tx interrupt */
-	UART1->CR1 &= ~USART_CR1_TXEIE;
+	USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 
 	/* TXE bit as 1 */
-	if ((UART1->SR >> 7))
+	if ((USART1->SR >> 7))
 		/* Write data to DR register if data is popped from Queue successfully */
 		if (deQueue(tx_queue_buffer, &byte))
-			UART1->DR = byte;
+			USRT1->DR = byte;
 }
 
