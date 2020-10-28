@@ -34,7 +34,7 @@ void Uart_Init(Gst_UartRegType *Channel, uint32_t baudrate)
 	Uart_SetBaudrate(Channel, baudrate);
 
 	/* Enable TX/RX */
-	Channel->CR1 = USART_CR1_UE | USART_CR1_TE | USART_CR1_RE;
+	Channel->CR1 = USART_CR1_UE | USART_CR1_TE ;
 
 	/* Init Tx/Rx buffer */
 	tx_queue_buffer = queueCreate(128);
@@ -68,7 +68,7 @@ void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32Len
 
 	while (len)
 	{
-		while (len && !enQueue(tx_queue_buffer, **u8DataPtr++)))
+		while (len && enQueue(tx_queue_buffer, *u8DataPtr++))
 			len--;
 		/* Enable Tx interrupt */
 		Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
@@ -102,8 +102,8 @@ void USART1_IRQHandler(void)
 			USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 
 	/* Receiving */
-	if ((USART1->SR >> 5)) {
-		enQueue(rx_queue_buffer, (char)USART1->DR);
-	}
+//	if ((USART1->SR >> 5)) {
+//		enQueue(rx_queue_buffer, (char)USART1->DR);
+//	}
 
 }
