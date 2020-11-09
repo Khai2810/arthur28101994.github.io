@@ -91,14 +91,13 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */
-  Uart_Init(USART1, 115200);
 
   const char *str = "\nNeu ban that su tai gioi, duc do thi moi nguoi xung quanh "
-					  "se tu nhin nhan va danh gia khong can go trong khua chieng.\n";
+		  "se tu nhin nhan va danh gia khong can go trong khua chieng.\n";
   uint32_t str_size = strlen(str);
 
   /* USER CODE END 2 */
-  Uart_Init(USART1, 9600);
+  Uart_Init(USART1, 115200);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

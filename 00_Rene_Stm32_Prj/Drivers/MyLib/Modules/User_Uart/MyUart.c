@@ -61,14 +61,14 @@ void Uart_DeInit(Gst_UartRegType *Channel)
 
 void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32LengthSize)
 {
-	uint32_t len = u32LengthSize;
+	int32_t len = u32LengthSize;
 
 	/* Disable Tx interrupt */
 	Channel->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 
-	while (len)
+	while (len > 0 )
 	{
-		while (len && enQueue(tx_queue_buffer, *u8DataPtr++))
+		while(len > 0 && enQueue(tx_queue_buffer, *u8DataPtr++))
 			len--;
 		/* Enable Tx interrupt */
 		Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
@@ -77,6 +77,7 @@ void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32Len
 
 void Uart_Receive(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32LengthSize)
 {
+
 	char byte;
 
 	/* Enable Rx interrupt */
@@ -97,8 +98,8 @@ void USART1_IRQHandler(void)
 		/* Write data to DR register if data is popped from Queue successfully */
 		if (deQueue(tx_queue_buffer, &byte))
 			USART1->DR = byte;
-		else
 			/* Disable Tx interrupt */
+		else
 			USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 
 	/* Receiving */
