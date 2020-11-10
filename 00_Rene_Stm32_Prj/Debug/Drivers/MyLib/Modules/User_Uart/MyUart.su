@@ -2,5 +2,5 @@ MyUart.c:9:6:Uart_SetBaudrate	32	static
 MyUart.c:28:6:Uart_Init	24	static
 MyUart.c:49:6:Uart_DeInit	16	static
 MyUart.c:62:6:Uart_Transmit	32	static
-MyUart.c:78:6:Uart_Receive	32	static
-MyUart.c:92:6:USART1_IRQHandler	16	static
+MyUart.c:75:6:Uart_Receive	32	static
+MyUart.c:89:6:USART1_IRQHandler	16	static

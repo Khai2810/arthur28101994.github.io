@@ -1,0 +1,6 @@
+User_Uart_Ipw.c:4:6:User_Uart_Ipw_Init	16	static
+User_Uart_Ipw.c:14:16:User_Uart_Ipw_AsyncTransmit	24	static
+User_Uart_Ipw.c:28:16:User_Uart_Ipw_ReceiveData	32	static
+User_Uart_Ipw.c:43:16:User_Ip_Ipw_FindByte	24	static
+User_Uart_Ipw.c:57:16:User_Ip_Ipw_DeleteRxData	24	static
+User_Uart_Ipw.c:72:16:User_Ip_Ipw_ReadByte	24	static

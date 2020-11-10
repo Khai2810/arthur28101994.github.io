@@ -1,0 +1,247 @@
+#ifndef __USER_IP_USART_REGISTER__
+#define __USER_IP_USART_REGISTER__
+
+
+
+#define USER_IP_USART_INSTANCE_COUNT      (2U)
+
+// pending
+typedef enum
+{
+  USER_IP_USART1_RXTX_IRQn            = 37u,            /**< USART1 Transmit / Receive Interrupt */
+  USER_IP_USART2_RXTX_IRQn            = 38u,            /**< USART2 Transmit / Receive Interrupt */
+  USER_IP_USART3_RXTX_IRQn            = 39u,            /**< USART1 Transmit / Receive Interrupt */
+} User_UsartIRQn_Type;
+
+typedef struct {
+	uint32_t SR;								/**< Status Register, offset: 0x00 */
+	uint32_t DR;								/**< Data Register, offset: 0x04 */
+	uint32_t BRR;								/**< Baud Rate Register, offset: 0x08 */
+	uint32_t CR1;								/**< Control Register 1, offset: 0x0C */
+	uint32_t CR2;								/**< Control Register 2, offset: 0x10 */
+	uint32_t CR3;								/**< Control Register 3, offset: 0x14 */
+	uint32_t GTPR;								/**< Discard Register, offset: 0x18 */
+}   User_Ip_Usart_Type, *User_Ip_Usart_MemMapPtr;
+
+
+#define USER_IP_USART_USART1_BASEADDR			(0x40013800U)
+#define USER_USART1								((User_Ip_Usart_Type*)USER_IP_USART_USART1_BASEADDR)
+
+#define USER_IP_USART_USART2_BASEADDR			(0x40004400U)
+#define USER_USART2								((User_Ip_Usart_Type*)USER_IP_USART_USART2_BASEADDR)
+
+#define USER_IP_USART_USART3_BASEADDR			(0x40004400U)
+#define USER_USART3								((User_Ip_Usart_Type*)USER_IP_USART_USART3_BASEADDR)
+
+#define USER_IP_USART_BASE_PTRS                  {USER_USART1,USER_USART2,USER_USART3}
+#define USER_IP_USART_RXTX_IRQS                  {USER_IP_USART1_RXTX_IRQn, USER_IP_USART2_RXTX_IRQn,USER_IP_USART3_RXTX_IRQn}
+
+////////////////////////////////////////////////////////////
+#define USER_IP_USART_RESET_VALUE				0x00000000u
+
+/*========================= *STATUS REGISTER* =========================*/
+#define USER_IP_USART_SR_CTS_MASK				0x00000200u
+#define USER_IP_USART_SR_CTS_SHIFT				9u
+#define USER_IP_USART_SR_CTS_WIDTH				1u
+
+#define USER_IP_USART_SR_LBD_MASK				0x00000100u
+#define USER_IP_USART_SR_LBD_SHIFT				8u
+#define USER_IP_USART_SR_LBD_WIDTH				1u
+
+#define USER_IP_USART_SR_TXE_MASK				0x00000080u
+#define USER_IP_USART_SR_TXE_SHIFT				7u
+#define USER_IP_USART_SR_TXE_WIDTH				1u
+
+#define USER_IP_USART_SR_TC_MASK				0x00000040u
+#define USER_IP_USART_SR_TC_SHIFT				6u
+#define USER_IP_USART_SR_TC_WIDTH				1u
+
+#define USER_IP_USART_SR_RXNE_MASK				0x00000020u
+#define USER_IP_USART_SR_RXNE_SHIFT				5u
+#define USER_IP_USART_SR_RXNE_WIDTH				1u
+
+#define USER_IP_USART_SR_IDLE_MASK				0x00000010u
+#define USER_IP_USART_SR_IDLE_SHIFT				4u
+#define USER_IP_USART_SR_IDLE_WIDTH				1u
+
+#define USER_IP_USART_SR_ORE_MASK				0x00000008u
+#define USER_IP_USART_SR_ORE_SHIFT				3u
+#define USER_IP_USART_SR_ORE_WIDTH				1u
+
+#define USER_IP_USART_SR_NE_MASK				0x00000004u
+#define USER_IP_USART_SR_NE_SHIFT				2u
+#define USER_IP_USART_SR_NE_WIDTH				1u
+
+#define USER_IP_USART_SR_FE_MASK				0x00000002u
+#define USER_IP_USART_SR_FE_SHIFT				1u
+#define USER_IP_USART_SR_FE_WIDTH				1u
+
+#define USER_IP_USART_SR_PE_MASK				0x00000001u
+#define USER_IP_USART_SR_PE_SHIFT				0u
+#define USER_IP_USART_SR_PE_WIDTH				1u
+
+/*========================= *DATA REGISTER* =========================*/
+#define USER_IP_USART_DR_DR_MASK				0x000000FFu
+#define USER_IP_USART_DR_DR_SHIFT				8u
+#define USER_IP_USART_DR_DR_WIDTH				9u
+
+/*========================= *BAUDRATE REGISTER* =========================*/
+#define USER_IP_USART_BRR_DIV_Mantissa_MASK				0x0000FFF0u
+#define USER_IP_USART_BRR_DIV_Mantissa_SHIFT			15u
+#define USER_IP_USART_BRR_DIV_Mantissa_WIDTH			12u
+
+#define USER_IP_USART_BRR_DIV_Fraction_MASK				0x0000000Fu
+#define USER_IP_USART_BRR_DIV_Fraction_SHIFT			3u
+#define USER_IP_USART_BRR_DIV_Fraction_WIDTH			4u
+
+/*========================= *CONTROL REGISTER 1* =========================*/
+#define USER_IP_USART_CR1_UE_MASK				0x00002000u
+#define USER_IP_USART_CR1_UE_SHIFT				13u
+#define USER_IP_USART_CR1_UE_WIDTH				1u
+
+#define USER_IP_USART_CR1_M_MASK				0x00001000u
+#define USER_IP_USART_CR1_M_SHIFT				12u
+#define USER_IP_USART_CR1_M_WIDTH				1u
+
+#define USER_IP_USART_CR1_WAKE_MASK				0x00000800u
+#define USER_IP_USART_CR1_WAKE_SHIFT			11u
+#define USER_IP_USART_CR1_WAKE_WIDTH			1u
+
+#define USER_IP_USART_CR1_PCE_MASK				0x00000400u
+#define USER_IP_USART_CR1_PCE_SHIFT				10u
+#define USER_IP_USART_CR1_PCE_WIDTH				1u
+
+#define USER_IP_USART_CR1_PS_MASK				0x00000200u
+#define USER_IP_USART_CR1_PS_SHIFT				9u
+#define USER_IP_USART_CR1_PS_WIDTH				1u
+
+#define USER_IP_USART_CR1_PEIE_MASK				0x00000100u
+#define USER_IP_USART_CR1_PEIE_SHIFT			8u
+#define USER_IP_USART_CR1_PEIE_WIDTH			1u
+
+#define USER_IP_USART_CR1_TXEIE_MASK			0x00000080u
+#define USER_IP_USART_CR1_TXEIE_SHIFT			7u
+#define USER_IP_USART_CR1_TXEIE_WIDTH			1u
+
+#define USER_IP_USART_CR1_TCIE_MASK				0x00000040u
+#define USER_IP_USART_CR1_TCIE_SHIFT			6u
+#define USER_IP_USART_CR1_TCIE_WIDTH			1u
+
+#define USER_IP_USART_CR1_RXNEIE_MASK			0x00000020u
+#define USER_IP_USART_CR1_RXNEIE_SHIFT			5u
+#define USER_IP_USART_CR1_RXNEIE_WIDTH			1u
+
+#define USER_IP_USART_CR1_IDLEIE_MASK			0x00000010u
+#define USER_IP_USART_CR1_IDLEIE_SHIFT			4u
+#define USER_IP_USART_CR1_IDLEIE_WIDTH			1u
+
+#define USER_IP_USART_CR1_TE_MASK				0x00000008u
+#define USER_IP_USART_CR1_TE_SHIFT				3u
+#define USER_IP_USART_CR1_TE_WIDTH				1u
+
+#define USER_IP_USART_CR1_RE_MASK				0x00000004u
+#define USER_IP_USART_CR1_RE_SHIFT				2u
+#define USER_IP_USART_CR1_RE_WIDTH				1u
+
+#define USER_IP_USART_CR1_RWU_MASK				0x00000002u
+#define USER_IP_USART_CR1_RWU_SHIFT				1u
+#define USER_IP_USART_CR1_RWU_WIDTH				1u
+
+#define USER_IP_USART_CR1_SBK_MASK				0x00000001u
+#define USER_IP_USART_CR1_SBK_SHIFT				0u
+#define USER_IP_USART_CR1_SBK_WIDTH				1u
+
+/*========================= *CONTROL REGISTER 2* =========================*/
+#define USER_IP_USART_CR2_LINEN_MASK			0x00004000u
+#define USER_IP_USART_CR2_LINEN_SHIFT			14u
+#define USER_IP_USART_CR2_LINEN_WIDTH			1u
+
+#define USER_IP_USART_CR2_STOP_MASK				0x00003000u
+#define USER_IP_USART_CR2_STOP_SHIFT			13u
+#define USER_IP_USART_CR2_STOP_WIDTH			2u
+
+#define USER_IP_USART_CR2_CLKEN_MASK			0x00000800u
+#define USER_IP_USART_CR2_CLKEN_SHIFT			12u
+#define USER_IP_USART_CR2_CLKEN_WIDTH			1u
+
+#define USER_IP_USART_CR2_CPOL_MASK				0x00000400u
+#define USER_IP_USART_CR2_CPOL_SHIFT			11u
+#define USER_IP_USART_CR2_CPOL_WIDTH			1u
+
+#define USER_IP_USART_CR2_CPHA_MASK				0x00000200u
+#define USER_IP_USART_CR2_CPHA_SHIFT			10u
+#define USER_IP_USART_CR2_CPHA_WIDTH			1u
+
+#define USER_IP_USART_CR2_LBCL_MASK				0x00000100u
+#define USER_IP_USART_CR2_LBCL_SHIFT			9u
+#define USER_IP_USART_CR2_LBCL_WIDTH			1u
+
+#define USER_IP_USART_CR2_LBDIE_MASK			0x00000400u
+#define USER_IP_USART_CR2_LBDIE_SHIFT			6u
+#define USER_IP_USART_CR2_LBDIE_WIDTH			1u
+
+#define USER_IP_USART_CR2_LBDL_MASK				0x00000200u
+#define USER_IP_USART_CR2_LBDL_SHIFT			5u
+#define USER_IP_USART_CR2_LBDL_WIDTH			1u
+
+#define USER_IP_USART_CR2_ADD_MASK				0x0000000Fu
+#define USER_IP_USART_CR2_ADD_SHIFT				3u
+#define USER_IP_USART_CR2_ADD_WIDTH				4u
+
+/*========================= *CONTROL REGISTER 3* =========================*/
+#define USER_IP_USART_CR3_CTSIE_MASK			0x00000400u
+#define USER_IP_USART_CR3_CTSIE_SHIFT			10u
+#define USER_IP_USART_CR3_CTSIE_WIDTH			1u
+
+#define USER_IP_USART_CR3_CTSE_MASK				0x00000200u
+#define USER_IP_USART_CR3_CTSE_SHIFT			9u
+#define USER_IP_USART_CR3_CTSE_WIDTH			1u
+
+#define USER_IP_USART_CR3_RTSE_MASK				0x00000100u
+#define USER_IP_USART_CR3_RTSE_SHIFT			8u
+#define USER_IP_USART_CR3_RTSE_WIDTH			1u
+
+#define USER_IP_USART_CR3_DMAT_MASK				0x00000080u
+#define USER_IP_USART_CR3_DMAT_SHIFT			7u
+#define USER_IP_USART_CR3_DMAT_WIDTH			1u
+
+#define USER_IP_USART_CR3_DMAR_MASK				0x00000040u
+#define USER_IP_USART_CR3_DMAR_SHIFT			6u
+#define USER_IP_USART_CR3_DMAR_WIDTH			1u
+
+#define USER_IP_USART_CR3_SCEN_MASK				0x00000020u
+#define USER_IP_USART_CR3_SCEN_SHIFT			5u
+#define USER_IP_USART_CR3_SCEN_WIDTH			1u
+
+#define USER_IP_USART_CR3_NACK_MASK				0x00000010u
+#define USER_IP_USART_CR3_NACK_SHIFT			4u
+#define USER_IP_USART_CR3_NACK_WIDTH			1u
+
+#define USER_IP_USART_CR3_HDSEL_MASK			0x00000008u
+#define USER_IP_USART_CR3_HDSEL_SHIFT			3u
+#define USER_IP_USART_CR3_HDSEL_WIDTH			1u
+
+#define USER_IP_USART_CR3_IRLP_MASK				0x00000004u
+#define USER_IP_USART_CR3_IRLP_SHIFT			2u
+#define USER_IP_USART_CR3_IRLP_WIDTH			1u
+
+#define USER_IP_USART_CR3_IREN_MASK				0x00000002u
+#define USER_IP_USART_CR3_IREN_SHIFT			1u
+#define USER_IP_USART_CR3_IREN_WIDTH			1u
+
+#define USER_IP_USART_CR3_EIE_MASK				0x00000001u
+#define USER_IP_USART_CR3_EIE_SHIFT				0u
+#define USER_IP_USART_CR3_EIE_WIDTH				1u
+
+/*========================= *CONTROL REGISTER 3* =========================*/
+#define USER_IP_USART_GTPR_GT_MASK				0x0000FF00u
+#define USER_IP_USART_GTPR_GT_SHIFT				15u
+#define USER_IP_USART_GTPR_GT_WIDTH				8u
+
+#define USER_IP_USART_GTPR_PSC_MASK				0x000000FFu
+#define USER_IP_USART_GTPR_PSC_SHIFT			7u
+#define USER_IP_USART_GTPR_PSC_WIDTH			8u
+
+
+
+#endif /* __USER_IP_USART_REGISTER__ */

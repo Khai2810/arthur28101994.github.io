@@ -1,0 +1,4 @@
+User_Slip.c:7:6:User_Slip_Init	16	static
+User_Slip.c:22:16:User_Slip_SendFrame	32	static
+User_Slip.c:86:9:User_Slip_CreateSlipBuffer	16	static
+User_Slip.c:134:16:User_Slip_ReceivedFrame	48	static
