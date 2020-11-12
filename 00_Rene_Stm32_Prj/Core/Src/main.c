@@ -104,7 +104,7 @@ int main(void)
   {
     /* USER CODE END WHILE */
 	  Uart_Transmit(USART1, str, str_size);
-
+	  HAL_Delay(10);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

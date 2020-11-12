@@ -41,8 +41,9 @@
 #define USART_SR_IDLE			0x00000010
 #define USART_SR_RXNE			0x00000020
 #define USART_SR_TC				0x00000040
-#define USART_SR_LBD			0x00000080
-#define USART_SR_CTS			0x00000100
+#define USART_SR_TXE			0x00000080
+#define USART_SR_LBD			0x00000100
+#define USART_SR_CTS			0x00000200
 
 /* define bits of BRR register */
 #define USART_BBR_DIV_MANTISSA				0x00000001
