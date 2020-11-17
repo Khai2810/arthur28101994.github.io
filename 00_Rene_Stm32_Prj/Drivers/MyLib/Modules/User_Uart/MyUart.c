@@ -104,8 +104,8 @@ void USART1_IRQHandler(void)
 	}
 
 	/* Receiving */
-//	if ((USART1->SR >> 5)) {
-//		enQueue(rx_queue_buffer, (char)USART1->DR);
-//	}
+	if ((USART1->SR >> 5)) {
+		enQueue(rx_queue_buffer, (char)USART1->DR);
+	}
 
 }
