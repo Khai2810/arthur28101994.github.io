@@ -23,6 +23,7 @@
 #include "gpio.h"
 #include "Usart_Reg.h"
 #include "MyUart.h"
+#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -64,7 +65,6 @@ void SystemClock_Config(void);
   * @brief  The application entry point.
   * @retval int
   */
-
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -95,6 +95,8 @@ int main(void)
   const char *str = "\nNeu ban that su tai gioi, duc do thi moi nguoi xung quanh "
 		  "se tu nhin nhan va danh gia khong can go trong khua chieng.\n";
   uint32_t str_size = strlen(str);
+  uint8_t *u8DataPtr;
+  extern uint8_t VarRemain;
 
   /* USER CODE END 2 */
   Uart_Init(USART1, 115200);
@@ -102,9 +104,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+//	  Test = 0;
     /* USER CODE END WHILE */
-	  Uart_Transmit(USART1, str, str_size);
+//	  printf ("hello %d", Test);
+//	  Test++;
+	  Uart_Receive(USART1, u8DataPtr, 20, &VarRemain);
+	  if (VarRemain > 0 )
+	  {
+		  Uart_Transmit(USART1, u8DataPtr, 20, &VarRemain);
+	  }
 	  HAL_Delay(10);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

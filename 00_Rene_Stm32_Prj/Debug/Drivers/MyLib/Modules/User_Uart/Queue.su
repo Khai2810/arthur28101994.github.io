@@ -2,5 +2,5 @@ Queue.c:3:17:queueCreate	24	static
 Queue.c:20:6:queueRelease	16	static
 Queue.c:26:8:isQueueEmpty	16	static
 Queue.c:34:8:isQueueFull	16	static
-Queue.c:43:5:enQueue	16	static
-Queue.c:56:5:deQueue	16	static
+Queue.c:43:5:enQueue	24	static
+Queue.c:57:5:deQueue	24	static

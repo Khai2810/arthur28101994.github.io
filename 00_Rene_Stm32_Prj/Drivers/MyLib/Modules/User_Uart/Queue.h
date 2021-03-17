@@ -26,8 +26,8 @@ queue_buffer_t *queueCreate ( int size );
 void queueRelease ( queue_buffer_t *queue );
 bool_t isQueueEmpty ( queue_buffer_t *queue );
 bool_t isQueueFull ( queue_buffer_t *queue );
-int enQueue ( queue_buffer_t *queue, char data );
-int deQueue ( queue_buffer_t *queue, char *data );
+int enQueue ( queue_buffer_t *queue, char data, uint8_t* u8RemainQueue );
+int deQueue ( queue_buffer_t *queue, char *data, uint8_t* u8RemainQueue );
 
 
 #endif /*__QUEUE_H_ */
