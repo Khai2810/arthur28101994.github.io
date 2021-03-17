@@ -2,7 +2,7 @@
 #include "stdint.h"
 #include "gpio.h"
 #include "Queue.h"
-uint8_t VarRemain;
+uint8_t VarRemain = 0;
 queue_buffer_t *tx_queue_buffer;
 queue_buffer_t *rx_queue_buffer;
 
@@ -59,25 +59,25 @@ void Uart_DeInit(Gst_UartRegType *Channel)
 	HAL_NVIC_DisableIRQ(USART1_IRQn);
 }
 
-void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32LengthSize, uint8_t *u8Remain)
+void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t* u8Length)
 {
-	int32_t len = u32LengthSize;
+	uint8_t len = *u8Length;
 	/* Enable TX/RX */
 	Channel->CR1 = USART_CR1_UE | USART_CR1_TE;
 	/* Disable Tx interrupt */
 	Channel->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 	while(len > 0)
 	{
-		while(len > 0 && enQueue(tx_queue_buffer, *u8DataPtr++, u8Remain))
+		while(enQueue(tx_queue_buffer, *u8DataPtr++, &u8Length))
 			len--;
 		/* Enable Tx interrupt */
 		Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
 	}
 }
 
-void Uart_Receive(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32LengthSize, uint8_t *u8Remain)
+void Uart_Receive(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t* u8Length)
 {
-	int32_t len = u32LengthSize;
+	uint8_t len = u8Length;
 	char byte;
 	/* Enable TX/RX */
 	Channel->CR1 = USART_CR1_UE | USART_CR1_RE ;
@@ -85,7 +85,7 @@ void Uart_Receive(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint32_t u32Leng
 	Channel->CR1 |= (uint32_t)USART_CR1_RXNEIE;
 	while (len > 0)
 	{
-		while (len > 0 && deQueue(rx_queue_buffer, *u8DataPtr++, u8Remain))
+		while (len > 0 && deQueue(rx_queue_buffer, *u8DataPtr++, &u8Length))
 			len--;
 	}
 
