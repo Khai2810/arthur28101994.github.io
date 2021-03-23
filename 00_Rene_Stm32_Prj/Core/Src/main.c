@@ -24,6 +24,7 @@
 #include "Usart_Reg.h"
 #include "MyUart.h"
 #include <stdio.h>
+#include <stdlib.h>
   extern uint8_t VarRemain;
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -96,6 +97,7 @@ int main(void)
 		  "se tu nhin nhan va danh gia khong can go trong khua chieng.\n";
   uint32_t str_size = strlen(str);
   uint8_t *u8DataPtr;
+  u8DataPtr = (uint8_t *)malloc (sizeof (uint8_t));
 
 
   /* USER CODE END 2 */
@@ -110,8 +112,10 @@ int main(void)
 //	  Test++;
 	  Uart_Receive(USART1, u8DataPtr, &VarRemain);
 	  HAL_Delay(500);
-//	  Uart_Transmit(USART1, u8DataPtr, 20);
-
+//	  if (VarRemain > 0)
+//	  {
+//		  Uart_Transmit(USART1, u8DataPtr, 20);
+//	  }
 
     /* USER CODE BEGIN 3 */
   }

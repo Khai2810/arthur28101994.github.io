@@ -32,6 +32,7 @@ void Uart_Init(Gst_UartRegType *Channel, uint32_t baudrate)
 
 	Channel->CR1 &=  ~USART_CR1_TE;
 	Channel->CR1 &=  ~USART_CR1_RE;
+	Channel->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
 
 	/* Setting baudrate */
 	Uart_SetBaudrate(Channel, baudrate);
@@ -61,23 +62,21 @@ void Uart_DeInit(Gst_UartRegType *Channel)
 
 void Uart_Transmit(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t* u8Length)
 {
-	uint8_t len = *u8Length;
+//	uint8_t len = *u8Length;
 	/* Enable TX/RX */
 	Channel->CR1 = USART_CR1_UE | USART_CR1_TE;
 	/* Disable Tx interrupt */
 	Channel->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
-	while(len > 0)
-	{
-		while(enQueue(tx_queue_buffer, *u8DataPtr++, &u8Length))
-			len--;
-		/* Enable Tx interrupt */
-		Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
-	}
+	while(enQueue(tx_queue_buffer, *u8DataPtr++, &u8Length))
+		*u8Length -= 1;
+	/* Enable Tx interrupt */
+	Channel->CR1 |= (uint32_t)USART_CR1_TXEIE;
+
 }
 
 void Uart_Receive(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t* u8Length)
 {
-	uint8_t len = u8Length;
+	uint8_t len = *u8Length;
 	char byte;
 	/* Enable TX/RX */
 	Channel->CR1 = USART_CR1_UE | USART_CR1_RE ;
@@ -85,8 +84,10 @@ void Uart_Receive(Gst_UartRegType *Channel, uint8_t *u8DataPtr, uint8_t* u8Lengt
 	Channel->CR1 |= (uint32_t)USART_CR1_RXNEIE;
 	while (len > 0)
 	{
-		while (len > 0 && deQueue(rx_queue_buffer, *u8DataPtr++, &u8Length))
+		while (len > 0 && deQueue(rx_queue_buffer, u8DataPtr++))
+		{
 			len--;
+		}
 	}
 
 }
@@ -97,6 +98,16 @@ uint8_t count = 0;
 void USART1_IRQHandler(void)
 {
 	uint8_t byte;
+	/* Transmiting */
+	if (((USART1->SR & USART_SR_TXE) == USART_SR_TXE) && (VarRemain != 0))
+		/* Write data to DR register if data is popped from Queue successfully */
+	{
+		if (deQueue(tx_queue_buffer, &byte))
+			USART1->DR = byte;
+			/* Disable Tx interrupt */
+		else
+			USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
+	}
 //	testPtr = &ReceiveBuffer[count];
 	/* Receiving */
 	if ((USART1->SR & USART_SR_RXNE) == USART_SR_RXNE) {
@@ -105,18 +116,5 @@ void USART1_IRQHandler(void)
 //		testPtr++;
 //		count++;
 	}
-
-	/* Transmiting */
-	if ((USART1->SR & USART_SR_TXE) == USART_SR_TXE)
-		/* Write data to DR register if data is popped from Queue successfully */
-	{
-		if (deQueue(tx_queue_buffer, &byte, &VarRemain))
-			USART1->DR = byte;
-			/* Disable Tx interrupt */
-		else
-			USART1->CR1 &= (uint32_t)(~USART_CR1_TXEIE);
-	}
-
-
 
 }

@@ -49,12 +49,12 @@ int enQueue ( queue_buffer_t *queue, char data, uint8_t* u8LengthQueue )
 			queue->front = 0;
 		queue->rear = (queue->rear + 1) % queue->size;
 		queue->buffer[queue->rear] = data;
-		*u8LengthQueue = queue->rear - queue->front;
+		*u8LengthQueue += 1;
     }
     return Success;
 }
 
-int deQueue ( queue_buffer_t *queue, char *data, uint8_t* u8LengthQueue )
+int deQueue ( queue_buffer_t *queue, char *data )
 {	
     if ( isQueueEmpty( queue ) )
         return Failed;
@@ -67,7 +67,7 @@ int deQueue ( queue_buffer_t *queue, char *data, uint8_t* u8LengthQueue )
         else /* Queue has only one element. Reset the queue after dequeuing */
         {
 			queue->front = (queue->front + 1) % queue->size;
-        	*u8LengthQueue = queue->rear - queue->front;
+//        	*u8LengthQueue += 1;
         }
     }
     return Success;
